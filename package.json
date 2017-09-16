@@ -8,5 +8,33 @@
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "author": "Apache Cordova Team",
-    "license": "Apache-2.0"
+    "license": "Apache-2.0",
+    "dependencies": {
+        "cordova-android": "^6.2.3",
+        "cordova-plugin-barcodescanner": "^0.7.2",
+        "cordova-plugin-camera": "^2.4.1",
+        "cordova-plugin-compat": "^1.1.0",
+        "cordova-plugin-file": "^4.3.3",
+        "cordova-plugin-file-transfer": "^1.6.3",
+        "cordova-plugin-media": "^3.0.1",
+        "cordova-plugin-media-capture": "^1.4.3",
+        "cordova-plugin-whitelist": "1",
+        "cordova-plugin-x-socialsharing": "^5.2.0",
+        "es6-promise-plugin": "^4.1.0"
+    },
+    "cordova": {
+        "plugins": {
+            "cordova-plugin-x-socialsharing": {},
+            "cordova-plugin-whitelist": {},
+            "cordova-plugin-compat": {},
+            "cordova-plugin-camera": {},
+            "cordova-plugin-file": {},
+            "cordova-plugin-file-transfer": {},
+            "cordova-plugin-media-capture": {},
+            "cordova-plugin-media": {}
+        },
+        "platforms": [
+            "android"
+        ]
+    }
 }
