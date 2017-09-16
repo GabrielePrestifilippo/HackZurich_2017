@@ -37,8 +37,8 @@ PROJECT_ID = '764237941334'
 # CloudSQL & SQLAlchemy configuration
 # Replace the following values the respective values of your Cloud SQL
 # instance.
-CLOUDSQL_USER = 'caltrack'
-CLOUDSQL_PASSWORD = 'cLtrAckzUrich2017'
+CLOUDSQL_USER = 'root'
+CLOUDSQL_PASSWORD = 'root'
 CLOUDSQL_DATABASE = 'caltrack_1'
 # Set this value to the Cloud SQL connection name, e.g.
 #   "project:region:cloudsql-instance".

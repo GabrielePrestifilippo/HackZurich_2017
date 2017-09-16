@@ -3,7 +3,7 @@ from flask import render_template, make_response, request, json, jsonify, flash
 #https://pythonhosted.org/flask-mail/
 #from mailer import sendMail
 from app import app_secret, db
-from access_control import userRequired, userRequiredNoGroup
+from access_control import userRequired
 
 import model # #? do I need to import here if it is already imported in app?
 
