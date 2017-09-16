@@ -1042,10 +1042,10 @@ ons-range[disabled] .range {
   justify-content: space-between;
   height: 56px;
   border-bottom: 0;
-  -webkit-box-shadow: 0 1px 5px rgba(0,0,0,0.3);
-  box-shadow: 0 1px 5px rgba(0,0,0,0.3);
+  /* -webkit-box-shadow: 0 1px 5px rgba(0,0,0,0.3); */
+  /* box-shadow: 0 1px 5px rgba(0,0,0,0.3); */
   padding: 0;
-  background-color: #21d493;
+  background-color: #2dcc70;
   -webkit-background-size: 0;
   background-size: 0;
 }

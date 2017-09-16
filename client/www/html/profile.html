@@ -10,19 +10,19 @@
                 <ul class="mfb-component__list">
                     <li>
                         <a id="receiptButton" data-mfb-label="Receipt" class="mfb-component__button--child">
-                            <i class="mfb-component__child-icon fa fa-file-text"></i>
+                            <i class="mfb-component__child-icon ion-android-list"></i>
                         </a>
                     </li>
                     <li>
                         <a id="pictureButton" data-mfb-label="Photo" class="mfb-component__button--child">
-                            <i class="mfb-component__child-icon fa fa-camera"></i>
+                            <i class="mfb-component__child-icon ion-camera"></i>
                         </a>
                     </li>
 
                     <li>
                         <a id="voiceButton"
                            data-mfb-label="Voice" class="mfb-component__button--child">
-                            <i class="mfb-component__child-icon fa fa-microphone"></i>
+                            <i class="mfb-component__child-icon ion-android-microphone"></i>
                         </a>
                     </li>
                 </ul>
@@ -32,43 +32,50 @@
         <!-- <ons-list-header>Health index</ons-list-header>-->
         <div class="spider animated zoomIn" id="chart">
             <div id="circle" class="secret">
-                <div id="healthIndex">Health index
+                <div id="healthIndex">
                     <div id="percentageHealth">100%</div>
+                    healthy
                 </div>
             </div>
             <div id="nutrients">
-                <div id="carbs" class="nutrient"></div>
-                <div id="carbs" class="nutrient"></div>
-                <div id="carbs" class="nutrient"></div>
+                <div id="carbs" class="nutrient">CARBS
+                    <div class="progress">
+                        <div id="carbsBar" class="determinate" style="width: 70%"></div>
+                    </div>
+                    <div id="carbsPercentage">50%</div>
+                </div>
+                <div id="proteins" class="nutrient">PROTEINS
+                    <div class="progress">
+                        <div id="proteinsBar" class="determinate" style="width: 70%"></div>
+                    </div>
+                    <div id="proteinsPercentage">50%</div>
+                </div>
+                <div id="fat" class="nutrient">FATS
+                    <div class="progress">
+                        <div id="fatsBar" class="determinate" style="width: 70%"></div>
+                    </div>
+                    <div id="fatsPercentage">50%</div>
+                </div>
             </div>
         </div>
 
         <ons-list>
             <ons-list-header>
                 <div class="floatLeft">
-                    <i class="fa fa-chevron-left"></i>
+                    <i class="ion-chevron-left"></i>
                 </div>
                 Today
                 <div class="floatRight">
-                    <i class="fa fa-chevron-right"></i>
+                    <i class="ion-chevron-right"></i>
                 </div>
             </ons-list-header>
             <div class="smallDivider"></div>
 
-            <div class="brandItem">
-                <div class="indicator"><img src="images/salad.jpg"></div>
-                <div class="brand">Greek Salad</div>
-            </div>
-            </ons-list-item>
 
-            <div class="smallDivider"></div>
+           <div id="listEaten"></div>
 
-            <ons-list-item modifier="longdivider">
-                <div class="brandItem">
-                    <div class="indicator"><img src="images/apple.jpg"></div>
-                    <div class="brand">Apple</div>
-                </div>
-            </ons-list-item>
+
+
 
 
         </ons-list>
