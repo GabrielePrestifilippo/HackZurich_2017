@@ -1,44 +1,74 @@
 <ons-page id="profile">
 
     <div id="container">
+        <ul id="menu" class="mfb-component--br mfb-zoomin" data-mfb-toggle="hover">
+            <li class="mfb-component__wrap">
+                <a href="#" class="mfb-component__button--main">
+                    <i class="mfb-component__main-icon--resting ion-plus-round"></i>
+                    <i class="mfb-component__main-icon--active ion-close-round"></i>
+                </a>
+                <ul class="mfb-component__list">
+                    <li>
+                        <a id="receiptButton" data-mfb-label="Receipt" class="mfb-component__button--child">
+                            <i class="mfb-component__child-icon fa fa-file-text"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a id="pictureButton" data-mfb-label="Photo" class="mfb-component__button--child">
+                            <i class="mfb-component__child-icon fa fa-camera"></i>
+                        </a>
+                    </li>
 
-        <div class="main fa fa-cutlery" tabindex="1">
-            <div class="cir">
-                <a id="voiceButton" class="main fa fa-microphone" style="left:70%;bottom:70%;"><p>Voice</p></a>
-                <a id="pictureButton" class="main fa fa-camera" style="left:30%;bottom:35%;"><p>Photo</p></a>
-                <a id="receiptButton" class="main fa fa-file-text" style="left:5%;bottom:-10%;"><p>Receipt</p></a>
-
-            </div>
-        </div>
+                    <li>
+                        <a id="voiceButton"
+                           data-mfb-label="Voice" class="mfb-component__button--child">
+                            <i class="mfb-component__child-icon fa fa-microphone"></i>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
 
         <!-- <ons-list-header>Health index</ons-list-header>-->
         <div class="spider animated zoomIn" id="chart">
-            <div id="circle">
+            <div id="circle" class="secret">
                 <div id="healthIndex">Health index
-                    <div id="percentageHealth">80%</div>
+                    <div id="percentageHealth">100%</div>
                 </div>
             </div>
-
+            <div id="nutrients">
+                <div id="carbs" class="nutrient"></div>
+                <div id="carbs" class="nutrient"></div>
+                <div id="carbs" class="nutrient"></div>
+            </div>
         </div>
 
         <ons-list>
-            <ons-list-header>Last meals</ons-list-header>
-            <ons-list-item modifier="longdivider">
-                <div class="brandItem">
-                    <div class="indicator"><img src="images/salad.jpg"></div>
-                    <div class="brand">Greek Salad</div>
+            <ons-list-header>
+                <div class="floatLeft">
+                    <i class="fa fa-chevron-left"></i>
                 </div>
+                Today
+                <div class="floatRight">
+                    <i class="fa fa-chevron-right"></i>
+                </div>
+            </ons-list-header>
+            <div class="smallDivider"></div>
+
+            <div class="brandItem">
+                <div class="indicator"><img src="images/salad.jpg"></div>
+                <div class="brand">Greek Salad</div>
+            </div>
             </ons-list-item>
 
             <div class="smallDivider"></div>
-            
+
             <ons-list-item modifier="longdivider">
                 <div class="brandItem">
                     <div class="indicator"><img src="images/apple.jpg"></div>
                     <div class="brand">Apple</div>
                 </div>
             </ons-list-item>
-
 
 
         </ons-list>

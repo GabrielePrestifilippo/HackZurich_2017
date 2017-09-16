@@ -1,12 +1,23 @@
 // App logic.
 window.myApp = {};
-audioRecord = 'record.wav';
-var debug = true;
-document.addEventListener('init', function (event) {
-  var page = event.target;
+var audioRecord = 'record.wav';
+var debug = false;
+var state;
+var fileURL;
+var record;
+var initialized = false;
+document.addEventListener("deviceready", function () {
+  if (!initialized)
+    initialized = true;
+  else return;
 
   if (navigator && !debug)
-    window.requestFileSystem(LocalFileSystem.TEMPORARY, 0, gotFS, fail);
+  //LocalFileSystem.TEMPORARY
+    window.requestFileSystem(0, 0, gotFS, fail);
+
+  function fail (e) {
+    alert(JSON.stringify(e));
+  }
 
   function gotFS (fileSystem) {
     fileSystem.root.getFile(audioRecord, {
@@ -19,23 +30,20 @@ document.addEventListener('init', function (event) {
     fileURL = fileEntry.toURL();
   }
 
-  // Each page calls its own initialization controller.
-  if (myApp.controllers.hasOwnProperty(page.id)) {
-    myApp.controllers[page.id](page);
-  }
-
   //Method to upload Audio file to server
   var uploadAudio = function () {
     var win = function (r) {
       console.log("Code = " + r.responseCode);
       console.log("Response = " + r.response);
       console.log("Sent = " + r.bytesSent);
+      alert(r.response);
     }
 
     var fail = function (error) {
       alert("An error has occurred: Code = " + error.code);
       console.log("upload error source " + error.source);
       console.log("upload error target " + error.target);
+      alert("upload error source " + error.source + "\n upload error target " + error.target);
     }
 
     var options = new FileUploadOptions();
@@ -44,27 +52,84 @@ document.addEventListener('init', function (event) {
     options.mimeType = "audio/wav";
 
     var ft = new FileTransfer();
-    ft.upload(fileURL, encodeURI("URL AUDIO"), win, fail, options);
+    console.log(fileURL);
+
+    if (!debug)
+      ft.upload(fileURL, encodeURI("localhost/"), win, fail, options);
+
+  }
+  record = new Media(audioRecord,
+    // success callback
+    function () {
+      uploadAudio();
+    },
+    function (err) {
+      console.log("recordAudio():Audio Error: " + err.code);
+    });
+}, false);
+
+document.addEventListener('init', function (event) {
+
+  state = localStorage.getItem("state");
+  if (!state) {
+    state = {
+      foodList: {},
+      healthIndex: 80,
+      fat: 0,
+      sugar: 0,
+      protein: 0
+    }
+    localStorage.setItem("state", JSON.stringify(state));
+  } else {
+    state = JSON.parse(state);
   }
 
-  $("#secret").click(function () {
-    var modal = $('#recording');
-    modal.show();
+  var page = event.target;
 
-    modal.click(function () {
-      this.hide();
-    });
+  // Each page calls its own initialization controller.
+  if (myApp.controllers.hasOwnProperty(page.id)) {
+    myApp.controllers[page.id](page);
+  }
+
+  $(".secret").click(function () {
+    triggerNotification();
   });
 
-  //Three buttons
+  function triggerNotification () {
+    var date = new Date();
+    date.setSeconds(date.getSeconds() + 3);
 
-  $("#pictureButton, #receiptButton").click(function () {
+    cordova.plugins.notification.local.schedule({
+      id: 1,
+      title: "Did you have Lunch?",
+      message: "Insert some info about it..",
+      firstAt: date, // firstAt and at properties must be an IETF-compliant RFC 2822 timestamp
+      //every: "week", // this also could be minutes i.e. 25 (int)
+      // sound: "file://sounds/reminder.mp3",
+      // icon: "http://icons.com/?cal_id=1",
+      data: {meetingId: "123#fg8"}
+    });
+
+    cordova.plugins.notification.local.on("click", function (notification) {
+      document.querySelector('#myNavigator').pushPage('addFood.html');
+    });
+  }
+
+  //Three buttons
+  var alreadyTriggered = false;
+  $(".topMain").click(function (event) {
+    event.stopPropagation();
+  });
+  $("#pictureButton, #receiptButton").off('click');
+  $("#pictureButton, #receiptButton").on('click', function (e) {
     var clicked = this.id
 
+    e.stopPropagation();
+
     var type
-    if (clicked !== "voiceButton" || clicked !== "pictureButton" || clicked !== "receiptButton")
-      return
-    else if (this.id === "pictureButton")
+    console.log(clicked)
+
+    if (this.id === "pictureButton")
       type = 0
     else
       type = 1
@@ -73,7 +138,7 @@ document.addEventListener('init', function (event) {
 
     navigator.camera.getPicture(onCapturePhoto, onFail, {
       quality: 50,
-      destinationType: destinationType.FILE_URI
+      destinationType: 1
     });
 
     var retries = 0;
@@ -82,7 +147,7 @@ document.addEventListener('init', function (event) {
       var win = function (r) {
         clearCache();
         retries = 0;
-        alert('Done!');
+        alert('response' + r);
       }
 
       var fail = function (error) {
@@ -94,7 +159,7 @@ document.addEventListener('init', function (event) {
         } else {
           retries = 0;
           clearCache();
-          alert('Ups. Something wrong happened!');
+          alert('Ups. Something wrong happened! ' + error);
         }
       }
 
@@ -104,49 +169,52 @@ document.addEventListener('init', function (event) {
       options.mimeType = "image/jpeg";
       options.params = {type: type}; // if we need to send parameters to the server request
       var ft = new FileTransfer();
-      ft.upload(fileURI, encodeURI("URL SERVER"), win, fail, options);
+      alert(fileURI);
+      /*if (!debug)
+        ft.upload(fileURI, encodeURI("URL SERVER"), win, fail, options);
+        */
     }
 
     function onFail (message) {
       alert('Failed because: ' + message);
     }
   });
-  var record;
+
   var animationDots;
 
-  $("#voiceButton").bind('touchstart mousedown', function () {
-    if (navigator && !debug) {
-      record = new Media(audioRecord,
-        // success callback
-        function () {
-          uploadAudio();
-        },
+  var touchStarted = false;
+  $("#voiceButton").off('touchstart');
+  $("#voiceButton").off('touchend');
+  $("#voiceButton").on('touchstart', function () {
+    if (touchStarted)
+      return
+    else
+      touchStarted = true
 
-        // error callback
-        function (err) {
-          console.log("recordAudio():Audio Error: " + err.code);
-        });
+    if (navigator && !debug) {
+
       record.startRecord();
     }
     var countDots = 0;
     animationDots = setInterval(function () {
-      if (countDots <= 4)
+      if (countDots <= 3)
         countDots++
       else
         countDots = 0;
 
       var output = "Listening " + Array(countDots).join(".");
       $("#dots").html(output)
-    }, 500)
+    }, 1000)
     $("#recording").show();
 
-  }).bind('touchend mouseup', function () {
+  }).on('touchend', function () {
+    $("#recording").hide();
     clearInterval(animationDots);
     if (navigator && record) {
       record.stopRecord()
     }
+    touchStarted = false;
 
-    $("#recording").hide();
   });
 
 });
@@ -203,41 +271,15 @@ document.addEventListener("show", function (event) {
     firstProfile = true;
 
     $('#circle').circleProgress({
-      value: 0.75,
+      value: state.healthIndex / 100,
       size: 130,
       fill: {
         gradient: ["#9cccc9", "#00b5cc"]
       }
     });
+    $("#percentageHealth").html(state.healthIndex + "%");
 
   } else if (event.target.id == "camera") {
 
-    if (typeof cordova !== 'undefined') {
-      cordova.plugins.barcodeScanner.scan(
-        function (result) {
-          startWin(70);
-          setTimeout(function () {
-            $("#outfit").show();
-          }, 1200);
-        },
-        function (error) {
-          startWin(70);
-          setTimeout(function () {
-            $("#outfit").show();
-          }, 1200);
-        },
-        {
-          preferFrontCamera: false, // iOS and Android
-          showFlipCameraButton: true, // iOS and Android
-          showTorchButton: true, // iOS and Android
-          torchOn: false, // Android, launch with the torch switched on (if available)
-          prompt: "Place a barcode inside the scan area", // Android
-          resultDisplayDuration: 500, // Android, display scanned text for X ms. 0 suppresses it entirely, default 1500
-          formats: "QR_CODE,PDF_417", // default: all but PDF_417 and RSS_EXPANDED
-          orientation: "landscape", // Android only (portrait|landscape), default unset so it rotates with the device
-          disableAnimations: true // iOS
-        }
-      );
-    }
   }
 }, false);
