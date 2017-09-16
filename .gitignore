@@ -3,3 +3,4 @@ platforms/
 plugins/
 npm-debug.log
 .idea/workspace.xml
+.idea
