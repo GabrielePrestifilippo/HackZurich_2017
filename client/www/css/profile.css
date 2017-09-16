@@ -216,3 +216,10 @@ div#container {
 * {
     outline: none;
 }
+#logoName img {
+    max-width: 60%;
+    margin-bottom: 10px;
+}
+.center img {
+    max-height: 55px;
+}
