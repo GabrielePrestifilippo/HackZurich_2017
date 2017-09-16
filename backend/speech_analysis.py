@@ -32,7 +32,7 @@ class SpeechAnalysis:
         except:
             return []
 
-    def parse_foods(self, path):
+    def parse_foods(self, path, format='mp3'):
         """
         Parses the audio file & returns the foods that are contained in the speech
         :param path: path to the audio file
@@ -40,7 +40,7 @@ class SpeechAnalysis:
         """
         with open(path, 'rb') as audio:
             txt = json.dumps(SpeechAnalysis.speech_to_text('6d736cd4-1e01-4d6c-9c61-78ce7f803024', 'SBE03B3o5PTP').recognize(
-                audio, content_type='audio/mp3', timestamps=True,
+                audio, content_type='audio/'+format, timestamps=True,
                 word_confidence=True),
                 indent=2)
 
@@ -94,8 +94,14 @@ class SpeechAnalysis:
         4  Cheese, cottage, creamed, large or small curd ...             9
 
         """
-        return df[['item_name', 'nf_total_fat', 'nf_total_carbohydrate', 'nf_protein']]
-
+        pcf = df[['item_name','nf_total_fat','nf_total_carbohydrate','nf_protein']]
+        pcf['total'] = pcf['nf_total_fat'] + pcf['nf_total_carbohydrate'] + pcf['nf_protein']
+        pcf['fat_pct'] = pcf.nf_total_fat / pcf.total
+        pcf['protein_pct'] = pcf.nf_protein / pcf.total
+        pcf['carbon_pct'] = pcf.nf_total_carbohydrate / pcf.total
+        pcf = pcf.round({'fat_pct': 2, 'protein_pct': 2, 'carbon_pct': 2})
+        pcf = pcf.fillna(0)
+        return pcf
 
 # Example usage
 # s = SpeechAnalysis()
