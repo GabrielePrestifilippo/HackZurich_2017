@@ -2,7 +2,9 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" />
+
     <title></title>
 
     <script src="lib/onsen/js/onsenui.js"></script>
@@ -15,17 +17,17 @@
 
     <link rel="stylesheet" href="./css/animate.min.css">
 
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="js/jquery-3.1.1.min.js"></script>
     <script src="js/circle-progress.min.js"></script>
     <link rel="stylesheet" href="lib/onsen/css/onsenui.css">
     <link rel="stylesheet" href="lib/onsen/css/onsen-css-components.css">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="leaflet.css">
 
-
+    <link rel="stylesheet" href="css/index.css" />
     <link rel="stylesheet" href="css/font-awesome-4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="css/profile.css"/>
-    <link rel="stylesheet" href="css/mfb.min.css"/>
+    <link rel="stylesheet" href="css/profile.css" />
+    <link rel="stylesheet" href="css/mfb.min.css" />
 
     <style>
         @import url('Roboto-Regular.ttf');
@@ -33,8 +35,9 @@
         @import url('RobotoCondensed-Bold.ttf');
     </style>
     <style>
-        html*{
+        html * {
             font-family: "RobotoCondensed-Regular", sans-serif !important;
+            -webkit-backface-visibility: hidden !important;
         }
     </style>
 </head>
@@ -42,7 +45,7 @@
 <body>
 
 <!-- First navigation component: Navigator. This will remain always on top of the app. -->
-<ons-navigator id="myNavigator" page="splitter.html">
+<ons-navigator id="myNavigator" var="app.navi" page="splitter.html">
 </ons-navigator>
 
 
@@ -66,25 +69,64 @@
 </ons-modal>
 
 
-
 <ons-modal id="recording" style="pointer-events:none">
     <div id="recordingInside">
-        <ons-icon size=" 28px" style="padding-top:10px;" icon="fa-microphone"></ons-icon>
-        <div id="dots"></div>
+        <ons-icon size=" 28px" style="padding-top:10px;" icon="ion-android-microphone"></ons-icon>
+        <div id="dots">Listening</div>
     </div>
 </ons-modal>
 
 
+<ons-modal id="loginPage">
+    <div id="loginScreen">
+        <div id="spaceLogo"></div>
+       <div id="logoName"> HealthEat</div>
+        <div id="logo">
+        </div>
+        <div id="loginData">
+            Welcome Back
+            <input class="inputForm" type="text"
+                   placeholder="Username" />
+            <input class="inputForm" type="text"
+                   placeholder="Password" />
+            <div id="loginButton">Login</div>
+        </div>
+    </div>
+</ons-modal>
+
+<ons-modal id="loadingScreen" style="pointer-events:none">
+    <div id="loadingGif">
+        <img src="images/loading.gif">
+    </div>
+</ons-modal>
+<ons-modal id="notifModal">
+    <div id="wrapNotif">
+
+        <div class="notiText">Did you already have lunch?</div>
+        <div class="answers">
+            <div id="yesAnswer">
+                YES
+            </div>
+            <div id="noAnswer">
+                NO
+            </div>
+
+        </div>
+
+    </div>
+
+</ons-modal>
 <ons-template id="tabbar.html">
     <ons-page id="tabbarPage">
         <ons-toolbar>
             <div class="left">
                 <!-- Toolbar-button with different icons depending on the platform. -->
                 <ons-toolbar-button component="button/menu">
-                    <ons-icon icon="ion-navicon, material:md-search" size="32px, material:24px"></ons-icon>
+
                 </ons-toolbar-button>
             </div>
-            <div class="center">App logo here<img style="max-height: 30px;margin: auto;margin-top: 10px;top: 10px;" src=""></div>
+            <div class="center">HealthEat<img style="max-height: 30px;margin: auto;margin-top: 10px;top: 10px;"
+                                                  src=""></div>
             <div class="right">
 
             </div>
@@ -92,30 +134,54 @@
 
         <ons-tabbar id="myTabbar">
 
-            <ons-tab page="html/profile.html" active="true" >
-                <ons-icon size=" 30px" icon="ion-person"></ons-icon>
+            <ons-tab page="html/profile.html" active="true">
+                <ons-icon size=" 20px" icon="ion-person"></ons-icon>
             </ons-tab>
 
-
-            <ons-tab page="html/deals.html" >
-                <ons-icon size=" 30px" icon="ion-ios-pricetags"></ons-icon>
+            <ons-tab id="rewardPage" page="html/food.html">
+                <ons-icon size=" 20px" icon="ion-fork"></ons-icon>
             </ons-tab>
 
-            <ons-tab id="rewardPage" page="html/reward.html">
-                <ons-icon size=" 30px" icon="ion-social-usd"></ons-icon>
-            </ons-tab>
-
-
-            <ons-tab page="html/shop.html"id="tabShop" style="display: none" hidden="true">
-                <ons-icon icon="ion-map" class="tab-icon"></ons-icon>
+            <ons-tab page="html/deals.html">
+                <ons-icon size=" 20px" icon="ion-map"></ons-icon>
             </ons-tab>
 
 
         </ons-tabbar>
 
 
+        <ons-template id="shop.html">
+
+            <div id="picShop">
+            </div>
+
+            <div class="smallDivider"></div>
+            <div id="nameShop">SV Restaurant Polyterrasse</div>
+            <div class="smallDivider"></div>
+            <div id="opening">9AM - 6PM</div>
+
+            <div id="infoShop">
+
+                <br>
+                Sie haben die Wahl zwischen Menus aus aller Welt, beliebten Schweizer Klassikern und einem saisonalen
+                Buffet mit viel knackiger Frische. Alles aus besten Zutaten sorgfältig verarbeitet. Damit der Alltag
+                schön bunt bleibt, setzen wir auf viel Abwechslung, saisonale Highlights und neue Kreationen im
+                Menuplan.</p>
+            </div>
+            <div class="smallDivider"></div>
+            <div class="discountPrada">
+                <div class="nameDiscount">15% OFF on Salads for lunch</div>
+                <div class="descDiscount">Get any Sala from our menu with a discount of 15%<br>
+                    This offer is valid till 3PM, hurry up to get the deal!
+                </div>
+            </div>
+            <div class="smallDivider"></div>
+
+
+        </ons-template>
     </ons-page>
 </ons-template>
+
 
 </body>
 

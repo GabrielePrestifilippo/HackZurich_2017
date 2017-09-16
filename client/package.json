@@ -22,6 +22,7 @@
         "cordova-plugin-local-notifications": "git+https://github.com/katzer/cordova-plugin-local-notifications.git",
         "cordova-plugin-media": "^3.0.1",
         "cordova-plugin-media-capture": "^1.4.3",
+        "cordova-plugin-statusbar": "^2.2.3",
         "cordova-plugin-whitelist": "1",
         "cordova-plugin-x-socialsharing": "^5.2.0",
         "de.appplant.cordova.plugin.local-notification": "https://github.com/katzer/cordova-plugin-local-notifications",
@@ -44,7 +45,8 @@
                 "XWALK_COMMANDLINE": "--disable-pull-to-refresh-effect",
                 "XWALK_MODE": "embedded",
                 "XWALK_MULTIPLEAPK": "true"
-            }
+            },
+            "cordova-plugin-statusbar": {}
         },
         "platforms": [
             "android"

@@ -6,10 +6,13 @@ var state;
 var fileURL;
 var record;
 var initialized = false;
+
 document.addEventListener("deviceready", function () {
   if (!initialized)
     initialized = true;
   else return;
+
+  StatusBar.backgroundColorByHexString("#2dcc70");
 
   if (navigator && !debug)
   //LocalFileSystem.TEMPORARY
@@ -69,15 +72,89 @@ document.addEventListener("deviceready", function () {
 }, false);
 
 document.addEventListener('init', function (event) {
+  function getFood () {
+    /*
+        $.ajax({
+          type: "POST",
+          //url: ,
+          data: {token: token},
+          success: function (data) {
+            //set state to data
+            //generateFood(image, name, carbs, protein, fat);
+          },
+        });
+        */
+
+    var image = 'images/apple.jpg';
+    var name = 'Apple';
+    var carbs = 30;
+    var protein = 50;
+    var fat = 20;
+    var item = generateFood(name, image, carbs, protein, fat);
+    $("#wrapper").html("<br>");
+    $("#wrapper").append(item);
+
+    var image = 'images/salad.jpg';
+    var name = 'Greek Salad';
+    var itemFood = generateEaten(image, name);
+    $("#listEaten").html("");
+    $("#listEaten").append(itemFood);
+  }
+
+  function generateFood (name, image, carbs, protein, fat) {
+    return `
+  <div class="foodItem">
+    <div class="topFood" style="background-image: url(${image});">
+    </div>
+    <div class="bottomFood">
+    <div class="foodName">${name}</div>
+    <div class="foodText">
+    <div id="carbs" class="nutrient n1">Carb
+    <div class="progress p1">
+    <div  class="determinate d1" style="width: 70%"></div>
+    </div>
+    <div class="carbsPercentage">${carbs}%</div>
+    </div>
+    <div id="proteins" class="nutrient n1">Protein
+    <div class="progress p1">
+    <div  class="determinate d1" style="width: 70%"></div>
+    </div>
+    <div class="proteinsPercentage">${protein}%</div>
+    </div>
+    <div id="fat" class="nutrient n1">Fat
+    <div class="progress p1">
+    <div class="determinate d1" style="width: 70%"></div>
+    </div>
+    <div class="fatsPercentage">${fat}%</div>
+    </div>
+    </div>
+    </div>
+    </div>
+    `
+  }
+
+  function generateEaten (image, name) {
+    return `<div class="brandItem">
+      <div class="indicator"><img src="${image}"></div>
+      <div class="brand">${name}</div>
+    </div>
+    <div class="smallDivider"></div>`;
+  }
 
   state = localStorage.getItem("state");
+
+  if (!state || !state.token) {
+    $("#loginPage").show();
+  }
   if (!state) {
     state = {
       foodList: {},
       healthIndex: 80,
-      fat: 0,
-      sugar: 0,
-      protein: 0
+      fats: 50,
+      carbs: 60,
+      proteins: 30,
+      history: {},
+      token: undefined
     }
     localStorage.setItem("state", JSON.stringify(state));
   } else {
@@ -93,6 +170,40 @@ document.addEventListener('init', function (event) {
 
   $(".secret").click(function () {
     triggerNotification();
+  });
+
+  $("#loginButton").click(function () {
+    $("#loadingScreen").show();
+    $("#loginPage").hide();
+    getFood();
+    setTimeout(function () {
+      $("#loadingScreen").hide();
+    }, 200)
+
+    /*
+    var username=$(".inputForm")[0].value;
+    var password=$(".inputForm")[1].value;
+    $.ajax({
+      type: "POST",
+      //url: ,
+      data: { username: username, password: password },
+      success: function(data){
+        //set state to data
+        $("#loginPage").hide();
+        $("#loadingScreen").hide();
+      },
+    });
+    */
+
+  });
+
+  $("#yesAnswer").click(function () {
+    $("#notifModal").hide();
+    menu.setAttribute('data-mfb-state', 'open');
+  });
+  $("#noAnswer").click(function () {
+    $("#notifModal").hide();
+    document.querySelector('#myNavigator').pushPage('html/deals.html');
   });
 
   function triggerNotification () {
@@ -111,7 +222,8 @@ document.addEventListener('init', function (event) {
     });
 
     cordova.plugins.notification.local.on("click", function (notification) {
-      document.querySelector('#myNavigator').pushPage('addFood.html');
+      //document.querySelector('#myNavigator').pushPage('html/profile.html');
+      $("#notifModal").show();
     });
   }
 
@@ -219,18 +331,6 @@ document.addEventListener('init', function (event) {
 
 });
 
-function successShare () {
-
-  setTimeout(function () {
-    $(" #modal2").show();
-  }, 2500);
-
-  $("#modal2").click(function () {
-    this.hide();
-    $('#rewardPage').click();
-  });
-}
-
 var firstMap = false;
 var firstProfile = false;
 document.addEventListener("show", function (event) {
@@ -278,8 +378,21 @@ document.addEventListener("show", function (event) {
       }
     });
     $("#percentageHealth").html(state.healthIndex + "%");
+    $("#fatsBar").css("width", state.fats);
+    $("#proteinsBar").css("width", state.proteins);
+    $("#carbsBar").css("width", state.carbs);
+
+    $("#carbsPercentage").html(state.carbs + "%");
+    $("#fatsPercentage").html(state.fats + "%");
+    $("#proteinsPercentage").html(state.proteins + "%");
 
   } else if (event.target.id == "camera") {
 
   }
 }, false);
+
+function goToShop () {
+  document.querySelector('#myNavigator').pushPage('shop.html');
+  $("#loadingScreen").hide();
+  $("#loginPage").hide();
+}
