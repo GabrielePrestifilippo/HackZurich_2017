@@ -5,6 +5,9 @@ import os
 
 app = Flask(__name__)
 
+import routing_accounts
+import routing_projects
+
 @app.route('/')
 def test():
     return 'Test, API call!'
