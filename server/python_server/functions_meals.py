@@ -13,9 +13,9 @@ sys.path.insert(0,parentdir)
 from speech_analysis import SpeechAnalysis
 
 
-@userRequired
+#@userRequired
 def testMeals():
-    _token = request.form['token']
-    _audio_file = request.form['audio_file']
+    #_token = request.form['token']
+    #_audio_file = request.form['audio_file']
     return SpeechAnalysis.parse_foods('../data/chicken_dinner.mp3')
     
