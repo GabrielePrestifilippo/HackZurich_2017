@@ -1,21 +1,152 @@
 // App logic.
 window.myApp = {};
-
+audioRecord = 'record.wav';
+var debug = true;
 document.addEventListener('init', function (event) {
   var page = event.target;
+
+  if (navigator && !debug)
+    window.requestFileSystem(LocalFileSystem.TEMPORARY, 0, gotFS, fail);
+
+  function gotFS (fileSystem) {
+    fileSystem.root.getFile(audioRecord, {
+      create: true,
+      exclusive: false
+    }, gotFileEntry, fail);
+  }
+
+  function gotFileEntry (fileEntry) {
+    fileURL = fileEntry.toURL();
+  }
 
   // Each page calls its own initialization controller.
   if (myApp.controllers.hasOwnProperty(page.id)) {
     myApp.controllers[page.id](page);
   }
 
+  //Method to upload Audio file to server
+  var uploadAudio = function () {
+    var win = function (r) {
+      console.log("Code = " + r.responseCode);
+      console.log("Response = " + r.response);
+      console.log("Sent = " + r.bytesSent);
+    }
+
+    var fail = function (error) {
+      alert("An error has occurred: Code = " + error.code);
+      console.log("upload error source " + error.source);
+      console.log("upload error target " + error.target);
+    }
+
+    var options = new FileUploadOptions();
+    options.fileKey = "file";
+    options.fileName = "recordupload.wav";
+    options.mimeType = "audio/wav";
+
+    var ft = new FileTransfer();
+    ft.upload(fileURL, encodeURI("URL AUDIO"), win, fail, options);
+  }
+
   $("#secret").click(function () {
-    var modal = $('#modal');
+    var modal = $('#recording');
     modal.show();
 
     modal.click(function () {
       this.hide();
     });
+  });
+
+  //Three buttons
+
+  $("#pictureButton, #receiptButton").click(function () {
+    var clicked = this.id
+
+    var type
+    if (clicked !== "voiceButton" || clicked !== "pictureButton" || clicked !== "receiptButton")
+      return
+    else if (this.id === "pictureButton")
+      type = 0
+    else
+      type = 1
+    if (!navigator)
+      return
+
+    navigator.camera.getPicture(onCapturePhoto, onFail, {
+      quality: 50,
+      destinationType: destinationType.FILE_URI
+    });
+
+    var retries = 0;
+
+    function onCapturePhoto (fileURI) {
+      var win = function (r) {
+        clearCache();
+        retries = 0;
+        alert('Done!');
+      }
+
+      var fail = function (error) {
+        if (retries == 0) {
+          retries++
+          setTimeout(function () {
+            onCapturePhoto(fileURI)
+          }, 100)
+        } else {
+          retries = 0;
+          clearCache();
+          alert('Ups. Something wrong happened!');
+        }
+      }
+
+      var options = new FileUploadOptions();
+      options.fileKey = "file";
+      options.fileName = fileURI.substr(fileURI.lastIndexOf('/') + 1);
+      options.mimeType = "image/jpeg";
+      options.params = {type: type}; // if we need to send parameters to the server request
+      var ft = new FileTransfer();
+      ft.upload(fileURI, encodeURI("URL SERVER"), win, fail, options);
+    }
+
+    function onFail (message) {
+      alert('Failed because: ' + message);
+    }
+  });
+  var record;
+  var animationDots;
+
+  $("#voiceButton").bind('touchstart mousedown', function () {
+    if (navigator && !debug) {
+      record = new Media(audioRecord,
+        // success callback
+        function () {
+          uploadAudio();
+        },
+
+        // error callback
+        function (err) {
+          console.log("recordAudio():Audio Error: " + err.code);
+        });
+      record.startRecord();
+    }
+    var countDots = 0;
+    animationDots = setInterval(function () {
+      if (countDots <= 4)
+        countDots++
+      else
+        countDots = 0;
+
+      var output = "Listening " + Array(countDots).join(".");
+      $("#dots").html(output)
+    }, 500)
+    $("#recording").show();
+
+  }).bind('touchend mouseup', function () {
+    clearInterval(animationDots);
+    if (navigator && record) {
+      record.stopRecord()
+    }
+
+    $("#recording").hide();
   });
 
 });
@@ -75,7 +206,7 @@ document.addEventListener("show", function (event) {
       value: 0.75,
       size: 130,
       fill: {
-        gradient: ["#9cccc9","#00b5cc"]
+        gradient: ["#9cccc9", "#00b5cc"]
       }
     });
 
