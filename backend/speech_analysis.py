@@ -79,6 +79,24 @@ class SpeechAnalysis:
         selected_nutrition_df = usda.iloc[matched_food, :]
         return selected_nutrition_df
 
+    def nutrition_balance_df(self, df):
+        """
+        Given a nutrition dataframe, returns the carbonhydade, fat, protein amounts
+        :param df: input df
+        :return: filtered df
+
+        e.g.
+                                                           item_name  nf_total_fat  \
+        0  Veal, variety meats and by-products, tongue, c...             8
+        1             Babyfood, cereal, barley, dry - 0.5 oz             0
+        2  Broadbeans (fava beans), mature seeds, raw - 1...             2
+        3  Beef, chuck eye steak, boneless, separable lea...            62
+        4  Cheese, cottage, creamed, large or small curd ...             9
+
+        """
+        return df[['item_name', 'nf_total_fat', 'nf_total_carbohydrate', 'nf_protein']]
+
+
 # Example usage
 # s = SpeechAnalysis()
 # foods = s.parse_foods('./chicken_dinner.mp3')
