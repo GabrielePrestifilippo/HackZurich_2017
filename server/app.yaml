@@ -8,7 +8,7 @@ handlers:
 
 env_variables:
   GAE_ENGINE_CHECK: caltrack_gae
-  CLOUDSQL_CONNECTION_NAME: inlaid-reactor-180108:caltrack
+  CLOUDSQL_CONNECTION_NAME: inlaid-reactor-180108:caltrack1
   CLOUDSQL_USER: cator
   CLOUDSQL_PASSWORD: caltrackhackzurich2017
 

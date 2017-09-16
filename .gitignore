@@ -4,4 +4,4 @@ plugins/
 npm-debug.log
 .idea/workspace.xml
 .idea
-server/python_server/venv
+server/venv

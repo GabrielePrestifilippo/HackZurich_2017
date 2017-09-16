@@ -14,9 +14,10 @@ db.init_app(app)
 import routing_accounts
 import routing_meals
 
+
 @app.route('/')
 def test():
-    return 'Test, API call!'
+    return config.SQLALCHEMY_DATABASE_URI#'Test, API call!'
 
 # @app.route('/login')
 # def login():

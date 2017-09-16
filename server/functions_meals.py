@@ -12,6 +12,8 @@ sys.path.insert(0,parentdir)
 
 from speech_analysis import SpeechAnalysis
 
+import pandas as pd
+
 
 #file (fileKey)
 #fileName
@@ -23,7 +25,7 @@ def testMeals():
     #_token = request.form['token']
     #_audio_file = request.form['audio_file']
 
-    return testNutrition(SpeechAnalysis.parse_foods('../data/chicken_dinner.mp3')).to_json(orient='values')
+    return testNutrition(SpeechAnalysis.parse_foods('../data/chicken_dinner.mp3'))
 
 def testNutrition(foods):
     #_token = request.form['token']
@@ -33,5 +35,11 @@ def testNutrition(foods):
 def nutritionBalance(df):
     #_token = request.form['token']
     #_audio_file = request.form['audio_file']
-    return SpeechAnalysis.nutrition_balance_df(df)    
+    return SpeechAnalysis.nutrition_balance_df(df)
+
+def recommend():
+    #_token = request.form['token']
+    #_audio_file = request.form['audio_file']
+    csv = pd.read_csv('../data/usda_sample-2015.csv')
+    return SpeechAnalysis.recommend(testMeals(), SpeechAnalysis.nutrition_balance_df(csv)).to_json(orient='values')   
     

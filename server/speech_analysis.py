@@ -111,7 +111,8 @@ class SpeechAnalysis:
         pcf = pcf.fillna(0)
         return pcf
 
-    def recommend(self, user_history, items):
+    @staticmethod
+    def recommend(user_history, items):
         """
         Recommends food by balancing the daily nutritian ratio
         :param user_history: past consumption of the user
@@ -133,11 +134,11 @@ class SpeechAnalysis:
             df_dummy['name'] = row['item_name']
             df_dummy['score'] = score
 
-            df_dummy['score'] = df_dummy['score'].convert_objects(convert_numeric=True)
+            df_dummy['score'] = df_dummy['score'].convert_objects(convert_numeric=True, dtype=Float32)
 
             ranked_recommendations = ranked_recommendations.append(df_dummy, ignore_index=True)
 
-        ranked_recommendations = ranked_recommendations.nsmallest(5, 'score')
+        ranked_recommendations = ranked_recommendations.nsmallest(5, 'score')#pandas dataframe 2.7
         return ranked_recommendations
 
 # Example usage
