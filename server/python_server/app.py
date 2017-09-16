@@ -2,5 +2,37 @@ from flask import Flask
 app = Flask(__name__)
 
 @app.route('/')
-def hello_world():
-    return 'Hello, World!'
+def test():
+    return 'Test, API call!'
+
+@app.route('/login')
+def login():
+    return 'Login call!'
+
+@app.route('/logout')
+def logout():
+    return 'Logout call!'
+
+@app.route('/sigup')
+def sigup():
+    return 'signup call!'
+
+@app.route('/recover_password')
+def recover_password():
+    return 'recover_password call!'
+
+@app.route('/get_history')
+def get_history():
+    return 'get_history call!'
+
+@app.route('/get_suggestion')
+def get_suggestion():
+    return 'get_suggestion call!'
+
+@app.route('/upload_meal')
+def upload_meal():
+    return 'upload_meal call!'
+
+@app.route('/upload_meal_and_get_suggestion')
+def upload_meal_and_get_suggestion():
+    return 'upload_meal_and_get_suggestion call!'
