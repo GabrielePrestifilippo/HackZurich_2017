@@ -103,6 +103,29 @@ class SpeechAnalysis:
         pcf = pcf.fillna(0)
         return pcf
 
+        def recommend(self, user_history, items):
+	        ranked_recommendations = pd.DataFrame(columns=['name', 'score'])
+
+	        for index, row in items.iterrows():
+	            total = user_history.total + row.total
+	            score = 0
+	            score = (score + 0.5 * total - (user_history.nf_total_carbohydrate + row.nf_total_carbohydrate)) ** 2
+	            score = (score + 0.2 * total - (user_history.nf_protein + row.nf_protein)) ** 2
+	            score = (score + 0.3 * total - (user_history.nf_total_fat + row.nf_total_fat)) ** 2
+
+	            score = score ** 0.5
+
+	            df_dummy = pd.Series()
+	            df_dummy['name'] = row['item_name']
+	            df_dummy['score'] = score
+
+	            df_dummy['score'] = df_dummy['score'].convert_objects(convert_numeric=True)
+
+	            ranked_recommendations = ranked_recommendations.append(df_dummy, ignore_index=True)
+
+	        ranked_recommendations = ranked_recommendations.nsmallest(5, 'score')
+	        return ranked_recommendations
+
 # Example usage
 # s = SpeechAnalysis()
 # foods = s.parse_foods('./chicken_dinner.mp3')
