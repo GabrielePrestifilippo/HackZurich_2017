@@ -2,14 +2,11 @@ from model import getCurrentUser
 from flask import render_template
 
 def userRequired(func):
-    
     def wrapper():
         user = getCurrentUser()
         if user:
-            group = getCurrentGroup()
-            if group:
-                return func()
-        return render_template('index.html')
+            return func()
+        return "Not allowed"
     return wrapper
 
 def objectBelongsToUser(object):

@@ -1,0 +1,17 @@
+runtime: python27
+api_version: 1
+threadsafe: true
+
+handlers:
+- url: /.*
+  script: app.app
+
+env_variables:
+  GAE_ENGINE_CHECK: caltrack_gae
+  CLOUDSQL_CONNECTION_NAME: inlaid-reactor-180108:caltrack
+  CLOUDSQL_USER: cator
+  CLOUDSQL_PASSWORD: caltrackhackzurich2017
+
+libraries:
+- name: MySQLdb
+  version: "latest"  

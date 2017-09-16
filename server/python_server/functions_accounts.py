@@ -22,19 +22,20 @@ def signUp():
         if(user):
             return json.dumps({'warning':'A user already exists with the same username!!', 'success':'false', 'warning_type':'danger'})
 
-        user = model.User(_email, _username, _hashed_password)
+        token = generate_password_hash(_username+_password)
+        user = model.User(_email, _username, _hashed_password, token)
         db.session.add(user)
         db.session.commit()
+
         #TODO find a way to check that the registry is already in the DB
         user = model.User.query.filter_by(usrEmail=_email).first()
 
-        sendMail('Activate your HTImagr account', _email, 'Some body', '<h1>Some HTML</h1>')
+        #sendMail('Activate your HTImagr account', _email, 'Some body', '<h1>Some HTML</h1>')
 
         if(user):
             return json.dumps({'warning':'New User Created Successfully !!','success':'true', 'warning_type':'success'})
         else:
             return json.dumps({'warning':'Something went wrong :(','success':'false', 'warning_type':'danger'})
-
         
     else:
         return json.dumps({'warning':'Enter the required fields', 'success':'false', 'warning_type':'danger'})
@@ -52,12 +53,8 @@ def signIn():
                 return json.dumps({'warning':'User not activated!! Please check your email inbox and find an email with an activation link', 'success':'false', 'warning_type':'danger'})
 
             if check_password_hash(user.usrPassword, _password):
-                _token = generate_password_hash(user.usrEmail+app_secret)
                 user.usrPassword = ''
-                resp = make_response(json.dumps({'success': 'true', 'groups': model.Group.serialize_list(user.groups),
-                                                                    'user': model.User.serialize(user)}))
-                resp.set_cookie('username', user.usrUsername)
-                resp.set_cookie('token', _token)
+                resp = make_response(json.dumps({'success': 'true', 'user': model.User.serialize(user), "token": user.usrToken}))
                 return resp
                 # return json.dumps({'warning':'Successful Sign In!!','token':_token, 'success':'true', 'warning_type':'success'})
             else:

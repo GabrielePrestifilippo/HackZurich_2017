@@ -1,0 +1,7 @@
+flask
+sqlalchemy
+flask_sqlalchemy
+PyMySql
+pandas
+watson_developer_cloud
+nltk
