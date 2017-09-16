@@ -36,7 +36,6 @@ def signUp():
             return json.dumps({'warning':'New User Created Successfully !!','success':'true', 'warning_type':'success'})
         else:
             return json.dumps({'warning':'Something went wrong :(','success':'false', 'warning_type':'danger'})
-
         
     else:
         return json.dumps({'warning':'Enter the required fields', 'success':'false', 'warning_type':'danger'})

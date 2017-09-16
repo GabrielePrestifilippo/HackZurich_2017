@@ -32,18 +32,18 @@ DATA_BACKEND = 'cloudsql'
 
 # Google Cloud Project ID. This can be found on the 'Overview' page at
 # https://console.developers.google.com
-PROJECT_ID = '764237941334'
+PROJECT_ID = '949894137494'
 
 # CloudSQL & SQLAlchemy configuration
 # Replace the following values the respective values of your Cloud SQL
 # instance.
-CLOUDSQL_USER = 'root'
-CLOUDSQL_PASSWORD = 'root'
-CLOUDSQL_DATABASE = 'caltrack_1'
+CLOUDSQL_USER = 'cator'
+CLOUDSQL_PASSWORD = 'caltrackhackzurich2017'
+CLOUDSQL_DATABASE = 'caltrack'
 # Set this value to the Cloud SQL connection name, e.g.
 #   "project:region:cloudsql-instance".
 # You must also update the value in app.yaml.
-CLOUDSQL_CONNECTION_NAME = 'caltrack:caltrack'
+CLOUDSQL_CONNECTION_NAME = 'inlaid-reactor-180108:caltrack'
 
 # The CloudSQL proxy is used locally to connect to the cloudsql instance.
 # To start the proxy, use:

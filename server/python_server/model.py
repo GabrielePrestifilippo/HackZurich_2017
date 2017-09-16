@@ -11,8 +11,8 @@ from datetime import datetime
 # http://stackoverflow.com/questions/7102754/jsonify-a-sqlalchemy-result-set-in-flask
 
 def getCurrentUser():
-    if not 'token' in request.form:
-        return None
+    # if not 'token' in request.form:
+    #     return None
     token = request.form['token']
     user = User.query.filter_by(usrToken=token).first()
     if not user:
