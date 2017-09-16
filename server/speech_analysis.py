@@ -59,7 +59,7 @@ class SpeechAnalysis:
                 keyword_list.append(k['text'])
         
             #food = wn.synset('food.n.02')
-            food = pickle.load(open("../nltk_food2.p", "rb"))
+            food = pickle.load(open("./nltk_food2.p", "rb"))
             
             foods = [k for k in keyword_list if k in food]
             return json.dumps(foods)
@@ -71,7 +71,7 @@ class SpeechAnalysis:
         :param foods: list of foods
         :return: dataframe containing the nutrition info for the desired foods
         """
-        usda = pd.read_csv('../data/usda_sample-2015.csv')
+        usda = pd.read_csv('./data/usda_sample-2015.csv')
         usda = usda.drop(['brand_name', 'brand_id',
                           'item_id', 'upc', 'item_description', 'item_type', 'nf_ingredient_statement', 'updated_at'],
                          axis=1)
@@ -134,11 +134,11 @@ class SpeechAnalysis:
             df_dummy['name'] = row['item_name']
             df_dummy['score'] = score
 
-            df_dummy['score'] = df_dummy['score'].convert_objects(convert_numeric=True, dtype=Float32)
+            df_dummy['score'] = df_dummy['score'].convert_objects(convert_numeric=True)
 
             ranked_recommendations = ranked_recommendations.append(df_dummy, ignore_index=True)
 
-        ranked_recommendations = ranked_recommendations.nsmallest(5, 'score')#pandas dataframe 2.7
+        #ranked_recommendations = ranked_recommendations.nsmallest(5, 'score')#pandas dataframe 2.7
         return ranked_recommendations
 
 # Example usage

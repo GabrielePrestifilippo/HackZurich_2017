@@ -25,7 +25,7 @@ def testMeals():
     #_token = request.form['token']
     #_audio_file = request.form['audio_file']
 
-    return testNutrition(SpeechAnalysis.parse_foods('../data/chicken_dinner.mp3'))
+    return testNutrition(SpeechAnalysis.parse_foods('./data/chicken_dinner.mp3'))
 
 def testNutrition(foods):
     #_token = request.form['token']
@@ -40,6 +40,6 @@ def nutritionBalance(df):
 def recommend():
     #_token = request.form['token']
     #_audio_file = request.form['audio_file']
-    csv = pd.read_csv('../data/usda_sample-2015.csv')
+    csv = pd.read_csv('./data/usda_sample-2015.csv')
     return SpeechAnalysis.recommend(testMeals(), SpeechAnalysis.nutrition_balance_df(csv)).to_json(orient='values')   
     
