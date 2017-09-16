@@ -11,13 +11,13 @@ from datetime import datetime
 # http://stackoverflow.com/questions/7102754/jsonify-a-sqlalchemy-result-set-in-flask
 
 def getCurrentUser():
-    user = User.query.filter_by(usrUsername=request.cookies.get("username")).first()
+    if not 'token' in request.form:
+        return None
+    token = request.form['token']
+    user = User.query.filter_by(usrToken=token).first()
     if not user:
         return None
-    if check_password_hash(request.cookies.get("token"), user.usrEmail+app_secret):
-        return user
-    else:
-        return None
+    return user
 
 #Serializer and extra capabilities for models
 class Serializer(object):
@@ -37,9 +37,6 @@ class Serializer(object):
         user = getCurrentUser()
         if user:
             self.created_by = getCurrentUser().usrId
-            group = getCurrentGroup()
-            if(group):
-                self.group_id = group.grpId
 
     def logChanges(self):
         user = getCurrentUser()
@@ -96,18 +93,25 @@ class User(db.Model, Serializer):
     usrId = db.Column(db.Integer, primary_key=True)
     usrUsername = db.Column(db.String(80), unique=True)
     usrEmail = db.Column(db.String(80), unique=True)
+    usrToken = db.Column(db.String(80), unique=True)
     usrName = db.Column(db.String(120), unique=False)
     usrLastname = db.Column(db.String(120), unique=False)
     usrPassword = db.Column(db.String(120), unique=False)
-    usrActive = db.Column(db.Boolean, unique=False, default=0)
+    usrActive = db.Column(db.Boolean, unique=False, default=1)
 
     meals = db.relationship('Meal', backref=db.backref('user'), lazy='dynamic')
 
-    def __init__(self, email, username, password):
+    def __init__(self, email, username, password, token):
+        print "a"
         self.basic()
+        print "b"
         self.usrUsername = username
+        print "c"
         self.usrEmail = email
+        print "d"
         self.usrPassword = password
+        print "e"
+        self.usrToken = token
 
     def __repr__(self):
         return '<User %r>' % self.usrUsername
