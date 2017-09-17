@@ -6,17 +6,17 @@ handlers:
 - url: /.*
   script: app.app
 
-env_variables:
-  GAE_ENGINE_CHECK: caltrack_gae
-  CLOUDSQL_CONNECTION_NAME: caltrackernf:europe-west1:caltracknf
-  CLOUDSQL_USER: cator
-  CLOUDSQL_PASSWORD: caltrackhackzurich2017
+# env_variables:
+#   GAE_ENGINE_CHECK: caltrack_gae
+#   CLOUDSQL_CONNECTION_NAME: caltrackernf:europe-west1:caltracknf
+#   CLOUDSQL_USER: cator
+#   CLOUDSQL_PASSWORD: caltrackhackzurich2017
 
-libraries:
-- name: numpy
-  version: "1.6.1"  
-- name: MySQLdb
-  version: "latest"
+# libraries:
+# - name: numpy
+#   version: "1.6.1"  
+# - name: MySQLdb
+#   version: "latest"
 
 
 # runtime: python
