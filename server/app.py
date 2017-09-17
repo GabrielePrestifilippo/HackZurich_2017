@@ -5,19 +5,19 @@ import os
 
 app = Flask(__name__)
 
-app.config.from_object(config)
-app_secret = 'q9837asdvn23io4qu34#4534230989l1orubxalskdf'
+# app.config.from_object(config)
+# app_secret = 'q9837asdvn23io4qu34#4534230989l1orubxalskdf'
 
-db = SQLAlchemy(app)
-db.init_app(app)
+# db = SQLAlchemy(app)
+# db.init_app(app)
 
-import routing_accounts
-import routing_meals
+# import routing_accounts
+# import routing_meals
 
 
 @app.route('/')
 def test():
-    return config.SQLALCHEMY_DATABASE_URI#'Test, API call!'
+    return 'Test, API call!'
 
 # @app.route('/login')
 # def login():
