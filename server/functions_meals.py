@@ -20,7 +20,12 @@ import pandas as pd
 
 import model
 
-@userRequired
+def parseAudio():
+    #_token = request.form['token']
+    #_audio_file = request.form['audio_file']
+
+    return SpeechAnalysis.parse_foods('./data/chicken_dinner.mp3')
+
 def testMeals():
     #_token = request.form['token']
     #_audio_file = request.form['audio_file']
