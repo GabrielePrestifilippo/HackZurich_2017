@@ -43,7 +43,7 @@ CLOUDSQL_DATABASE = 'caltrack'
 # Set this value to the Cloud SQL connection name, e.g.
 #   "project:region:cloudsql-instance".
 # You must also update the value in app.yaml.
-CLOUDSQL_CONNECTION_NAME = 'inlaid-reactor-180108:europe-west3:caltrack4'
+CLOUDSQL_CONNECTION_NAME = 'caltrackernf:europe-west1:caltracknf'
 
 # The CloudSQL proxy is used locally to connect to the cloudsql instance.
 # To start the proxy, use:
